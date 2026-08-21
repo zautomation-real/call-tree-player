@@ -4,9 +4,18 @@ Reproductor web de guiones de llamada ramificados. Importa un archivo `.call.jso
 
 ## Usar la versión pública
 
-Abre la página publicada, pulsa **Seleccionar archivo** y elige cualquier `.call.json` compatible. También puedes arrastrarlo sobre el área de carga.
+Abre **[Call Tree Player en la web](https://zautomation-real.github.io/call-tree-player/)**, pulsa **Seleccionar archivo** y elige cualquier `.call.json` compatible. También puedes arrastrarlo sobre el área de carga. No hay que instalar ni descargar nada.
 
 Todo se procesa localmente en el navegador: el archivo no se envía a ningún servidor. El guion y la sesión se guardan únicamente en el almacenamiento local del dispositivo.
+
+## Qué contiene este repositorio
+
+Este repositorio sirve para dos formas de uso:
+
+1. **Uso directo desde la web.** GitHub Pages publica la aplicación en la dirección anterior. GitHub sirve los archivos estáticos de la interfaz y el navegador del usuario ejecuta la aplicación.
+2. **Uso o desarrollo en local.** El repositorio contiene todo el código fuente, los esquemas de validación, los archivos de ejemplo y las pruebas. Cualquier persona puede clonarlo o descargarlo y ejecutarlo en su ordenador siguiendo las instrucciones de instalación.
+
+La versión web y la versión local son la misma aplicación. No existe un servidor que reciba los guiones: al seleccionar un `.call.json`, la API de archivos del navegador lo lee en el dispositivo, lo valida y conserva la sesión en `localStorage`. Solo se realizaría una petición externa si el propio guion incluye una imagen o un enlace de evidencia y el usuario decide abrirlo.
 
 ## Requisitos
 
