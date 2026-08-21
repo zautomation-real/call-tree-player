@@ -1,41 +1,54 @@
 # Call Tree Player
 
-Reproductor web de guiones de llamada ramificados. Importa un archivo `.call.json`, valida su estructura y su grafo, y muestra en cada paso el texto que debe decir el caller junto a las posibles respuestas del cliente.
+Reproductor gratuito de guiones de llamada ramificados. Carga un `.call.json` y avanza por el guion según lo que responda la otra persona.
 
-## Usar la versión pública
+> **[Abrir Call Tree Player en el navegador](https://zautomation-real.github.io/call-tree-player/)**  
+> No requiere registro, instalación ni subida de archivos.
 
-Abre **[Call Tree Player en la web](https://zautomation-real.github.io/call-tree-player/)**, pulsa **Seleccionar archivo** y elige cualquier `.call.json` compatible. También puedes arrastrarlo sobre el área de carga. No hay que instalar ni descargar nada.
+![Call Tree Player durante una llamada](artifacts/screenshots/desktop-1440x900.png)
 
-Todo se procesa localmente en el navegador: el archivo no se envía a ningún servidor. El guion y la sesión se guardan únicamente en el almacenamiento local del dispositivo.
+## Empezar en menos de un minuto
 
-## Qué contiene este repositorio
+1. Abre **[la aplicación web](https://zautomation-real.github.io/call-tree-player/)**.
+2. Pulsa **Seleccionar archivo** o arrastra un archivo `.call.json` sobre la zona de carga.
+3. Si todavía no tienes uno, descarga el ejemplo [`minimal.call.json`](fixtures/valid/minimal.call.json) mediante **Download raw file** en GitHub.
+4. Revisa el resumen y pulsa **Iniciar llamada**.
+5. Durante la llamada, elige la respuesta que más se aproxime a lo que diga el cliente. El reproductor mostrará automáticamente el siguiente fragmento del guion.
 
-Este repositorio sirve para dos formas de uso:
+El guion se lee dentro de tu navegador. **No se envía a este repositorio ni a ningún servidor del proyecto.** La sesión se conserva únicamente en el almacenamiento local del dispositivo para poder recuperarla si recargas la página.
 
-1. **Uso directo desde la web.** GitHub Pages publica la aplicación en la dirección anterior. GitHub sirve los archivos estáticos de la interfaz y el navegador del usuario ejecuta la aplicación.
-2. **Uso o desarrollo en local.** El repositorio contiene todo el código fuente, los esquemas de validación, los archivos de ejemplo y las pruebas. Cualquier persona puede clonarlo o descargarlo y ejecutarlo en su ordenador siguiendo las instrucciones de instalación.
+## Dos formas de usarlo
 
-La versión web y la versión local son la misma aplicación. No existe un servidor que reciba los guiones: al seleccionar un `.call.json`, la API de archivos del navegador lo lee en el dispositivo, lo valida y conserva la sesión en `localStorage`. Solo se realizaría una petición externa si el propio guion incluye una imagen o un enlace de evidencia y el usuario decide abrirlo.
+| Modalidad | Para quién | Qué hay que hacer |
+| --- | --- | --- |
+| **Aplicación web** | Cualquier persona que quiera reproducir un guion | Abrir el enlace público y seleccionar un `.call.json` |
+| **Instalación local** | Quien prefiera ejecutarlo desde su propio ordenador o modificarlo | Descargar el repositorio, instalar las dependencias y arrancar la aplicación |
 
-## Requisitos
+La versión web y la versión local son la misma aplicación. No existe backend, cuenta de usuario ni base de datos.
 
-- Node.js 20 o posterior
-- pnpm 10 o posterior
+## Instalar y ejecutar en local
 
-## Instalación y uso local
+Necesitas [Node.js 20 o posterior](https://nodejs.org/) y [pnpm 10](https://pnpm.io/installation).
 
-### Inicio sencillo en Windows
+### Windows, macOS y Linux
 
-Con Node.js instalado, haz doble clic en `INICIAR_APP.cmd`. La aplicación arrancará localmente y se abrirá en el navegador. No abras `index.html` directamente: las aplicaciones Vite necesitan una dirección local (`http://127.0.0.1:4173/`), no una ruta `file://`.
-
-### Desarrollo
+Abre una terminal y ejecuta:
 
 ```bash
+git clone https://github.com/zautomation-real/call-tree-player.git
+cd call-tree-player
+corepack enable
 pnpm install
 pnpm dev
 ```
 
-Vite mostrará la dirección local de la aplicación. El archivo importado no se sube a ningún servidor: el guion, el estado y el historial permanecen en el navegador.
+Abre la dirección que aparezca en la terminal, normalmente `http://localhost:5173/`.
+
+Si has descargado el repositorio como ZIP, descomprímelo, abre una terminal dentro de la carpeta y ejecuta los tres últimos comandos.
+
+### Lanzador de Windows
+
+Después de instalar las dependencias y generar la versión de producción con `pnpm build`, puedes abrir `INICIAR_APP.cmd` con doble clic. Se iniciará en `http://127.0.0.1:4173/`. No abras `index.html` directamente.
 
 ## Comandos
 
@@ -63,7 +76,7 @@ No existe backend, base de datos, autenticación ni dependencia de red para el f
 
 Los esquemas canónicos están en `src/schemas/`. El archivo se valida con JSON Schema mediante Ajv y, después, con reglas semánticas: identificadores únicos, destinos existentes, resultados válidos y rutas inesperadas resolubles. Los ciclos y las etiquetas repetidas entre nodos distintos están permitidos.
 
-Los fixtures de ejemplo se encuentran en `fixtures/valid/`; los casos que deben rechazarse están en `fixtures/invalid/`.
+Los guiones de ejemplo se encuentran en [`fixtures/valid/`](fixtures/valid/). Los casos que el validador debe rechazar están en [`fixtures/invalid/`](fixtures/invalid/).
 
 ## Atajos
 
