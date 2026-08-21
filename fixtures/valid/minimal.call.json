@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "script_id": "minimal-001",
+  "title": "Ejemplo mínimo",
+  "company": { "name": "Empresa Ejemplo", "contact_name": "Marta", "phone": "+34 900 000 000" },
+  "start_node": "n1",
+  "outcomes": [
+    { "id": "follow_up", "label": "Seguimiento" },
+    { "id": "not_interested", "label": "No interesado" }
+  ],
+  "nodes": [
+    {
+      "id": "n1",
+      "say": "Hola, ¿podría hablar con Marta?",
+      "responses": [
+        { "id": "r1", "label": "Sí, soy yo", "next": "n2", "tone": "advance" },
+        { "id": "r2", "label": "No está disponible", "next": "n3", "tone": "handoff" }
+      ]
+    },
+    {
+      "id": "n2",
+      "say": "Gracias. Quería comentarte algo concreto que he observado en la web.",
+      "responses": [
+        { "id": "r1", "label": "Cuéntame", "next": "n_follow", "tone": "advance" },
+        { "id": "r2", "label": "No me interesa", "next": "n_close", "tone": "close" }
+      ]
+    },
+    {
+      "id": "n3",
+      "say": "¿Cuál sería un buen momento para encontrarla?",
+      "responses": [
+        { "id": "r1", "label": "Llama esta tarde", "next": "n_follow", "tone": "handoff" },
+        { "id": "r2", "label": "No volverá hoy", "next": "n_follow", "tone": "neutral" }
+      ]
+    },
+    { "id": "n_follow", "say": "Perfecto, lo anoto. Gracias.", "terminal": { "outcome": "follow_up" } },
+    { "id": "n_close", "say": "Entendido. Gracias por tu tiempo.", "terminal": { "outcome": "not_interested" } }
+  ]
+}

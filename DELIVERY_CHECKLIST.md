@@ -1,0 +1,24 @@
+# Checklist de entrega
+
+- [x] Repositorio fuente completo.
+- [x] Sin backend ni funciones fuera de alcance.
+- [x] Esquemas copiados sin cambios.
+- [x] Todos los fixtures válidos se aceptan.
+- [x] Todos los fixtures inválidos se rechazan por el motivo esperado.
+- [x] Las etiquetas repetidas entre nodos funcionan.
+- [x] Geometría 50/50 dentro de los rangos de aceptación.
+- [x] Seis botones visibles a 1440×900 y con altura mínima de 86 px.
+- [x] Back utiliza el historial real.
+- [x] Registro inesperado, override, `@return`, ramas y `@end` implementados.
+- [x] Evidencia oculta hasta que se abre.
+- [x] Autosave y restauración comprobados.
+- [x] Nodos terminales y pantalla final comprobados.
+- [x] Atajos y gestión de foco comprobados.
+- [x] Análisis automático de accesibilidad aprobado.
+- [x] `npm run build` aprobado.
+- [x] 19 pruebas unitarias/de componentes aprobadas.
+- [x] 16 pruebas Playwright aprobadas.
+- [x] Capturas desktop y móvil incluidas.
+- [x] README con ejecución, build y despliegue.
+- [x] Inicio local por doble clic en Windows incluido.
+- [x] ZIP sin `node_modules`, cachés, secretos ni dependencias generadas.

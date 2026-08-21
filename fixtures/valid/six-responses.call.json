@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "script_id": "six-responses-001",
+  "title": "Seis respuestas",
+  "company": { "name": "Empresa Ejemplo", "contact_name": "Laura", "phone": "+34 900 000 000" },
+  "start_node": "n1",
+  "outcomes": [{ "id": "done", "label": "Finalizada" }],
+  "nodes": [
+    {
+      "id": "n1",
+      "say": "He encontrado una diferencia concreta en vuestra web y quería avisarte.",
+      "evidence": [{ "title": "Diferencia detectada", "text": "La página publica dos datos de contacto distintos.", "url": "https://example.com/contact" }],
+      "responses": [
+        { "id": "r1", "label": "Ya tenemos proveedor", "next": "n2", "tone": "objection" },
+        { "id": "r2", "label": "¿Qué diferencia?", "next": "n2", "tone": "clarify" },
+        { "id": "r3", "label": "No soy la persona", "next": "n2", "tone": "handoff" },
+        { "id": "r4", "label": "Envíamelo por correo", "next": "n2", "tone": "advance" },
+        { "id": "r5", "label": "¿Cuánto costaría?", "next": "n2", "tone": "clarify" },
+        { "id": "r6", "label": "No me interesa", "next": "n2", "tone": "close" }
+      ]
+    },
+    { "id": "n2", "say": "Perfecto, gracias por tu tiempo.", "terminal": { "outcome": "done" } }
+  ]
+}

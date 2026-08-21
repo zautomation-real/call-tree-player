@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "script_id": "duplicate-node-001",
+  "title": "Invalid duplicate node",
+  "company": { "name": "Example" },
+  "start_node": "n1",
+  "outcomes": [{ "id": "done", "label": "Done" }],
+  "nodes": [
+    {
+      "id": "n1",
+      "say": "Hello",
+      "responses": [
+        { "id": "r1", "label": "A", "next": "n2" },
+        { "id": "r2", "label": "B", "next": "n2" }
+      ]
+    },
+    { "id": "n2", "say": "Bye", "terminal": { "outcome": "done" } },
+    { "id": "n2", "say": "Duplicate", "terminal": { "outcome": "done" } }
+  ]
+}

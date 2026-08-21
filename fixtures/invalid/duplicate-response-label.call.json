@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0.0",
+  "script_id": "duplicate-response-label-001",
+  "title": "Invalid duplicate response label",
+  "company": { "name": "Example" },
+  "start_node": "n1",
+  "outcomes": [{ "id": "done", "label": "Done" }],
+  "nodes": [
+    {
+      "id": "n1",
+      "say": "Hello",
+      "responses": [
+        { "id": "r1", "label": "Same answer", "next": "n2" },
+        { "id": "r2", "label": "Same answer", "next": "n2" }
+      ]
+    },
+    { "id": "n2", "say": "Bye", "terminal": { "outcome": "done" } }
+  ]
+}

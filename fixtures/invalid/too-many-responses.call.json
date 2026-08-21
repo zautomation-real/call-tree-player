@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "script_id": "too-many-001",
+  "title": "Invalid seven responses",
+  "company": { "name": "Example" },
+  "start_node": "n1",
+  "outcomes": [{ "id": "done", "label": "Done" }],
+  "nodes": [
+    {
+      "id": "n1",
+      "say": "Hello",
+      "responses": [
+        { "id": "r1", "label": "A", "next": "n2" },
+        { "id": "r2", "label": "B", "next": "n2" },
+        { "id": "r3", "label": "C", "next": "n2" },
+        { "id": "r4", "label": "D", "next": "n2" },
+        { "id": "r5", "label": "E", "next": "n2" },
+        { "id": "r6", "label": "F", "next": "n2" },
+        { "id": "r7", "label": "G", "next": "n2" }
+      ]
+    },
+    { "id": "n2", "say": "Bye", "terminal": { "outcome": "done" } }
+  ]
+}

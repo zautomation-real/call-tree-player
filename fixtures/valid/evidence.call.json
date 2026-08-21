@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "script_id": "evidence-001",
+  "title": "Ejemplo con evidencia",
+  "company": { "name": "Empresa Ejemplo" },
+  "start_node": "n1",
+  "outcomes": [{ "id": "done", "label": "Finalizada" }],
+  "nodes": [
+    {
+      "id": "n1",
+      "say": "He encontrado dos teléfonos distintos publicados en vuestra página de contacto.",
+      "evidence": [
+        {
+          "title": "Datos diferentes",
+          "text": "La cabecera y el pie muestran teléfonos diferentes.",
+          "url": "https://example.com/contact"
+        }
+      ],
+      "responses": [
+        { "id": "r1", "label": "¿Dónde aparece?", "next": "n2", "tone": "clarify" },
+        { "id": "r2", "label": "Lo revisaremos", "next": "n2", "tone": "neutral" }
+      ]
+    },
+    { "id": "n2", "say": "Perfecto. Te envío la ubicación exacta.", "terminal": { "outcome": "done" } }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0.0",
+  "script_id": "repeated-provider-001",
+  "title": "Proveedor repetido",
+  "company": { "name": "Empresa Ejemplo", "contact_name": "Laura" },
+  "start_node": "n1",
+  "outcomes": [
+    { "id": "send_evidence", "label": "Enviar evidencia" },
+    { "id": "closed", "label": "Conversación cerrada" }
+  ],
+  "nodes": [
+    {
+      "id": "n1",
+      "say": "He encontrado una diferencia concreta en vuestra web y quería avisarte.",
+      "responses": [
+        { "id": "r1", "label": "Ya tenemos proveedor", "next": "n_provider_first", "tone": "objection" },
+        { "id": "r2", "label": "¿Qué diferencia?", "next": "n_explain", "tone": "clarify" }
+      ]
+    },
+    {
+      "id": "n_provider_first",
+      "say": "Perfecto. No asumo que necesitéis cambiarlo. Quería que pudierais revisar el dato con él. ¿La web la gestiona directamente ese proveedor?",
+      "responses": [
+        { "id": "r1", "label": "Sí, se encarga de todo", "next": "n_offer_evidence", "tone": "neutral" },
+        { "id": "r2", "label": "No estoy seguro", "next": "n_explain", "tone": "clarify" }
+      ]
+    },
+    {
+      "id": "n_explain",
+      "say": "La página de contacto publica dos datos distintos. Si quieres, te digo exactamente dónde aparece.",
+      "responses": [
+        { "id": "r1", "label": "Ya tenemos proveedor", "next": "n_provider_repeated", "tone": "objection" },
+        { "id": "r2", "label": "Dime dónde", "next": "n_offer_evidence", "tone": "advance" }
+      ]
+    },
+    {
+      "id": "n_provider_repeated",
+      "say": "Sí, lo tengo en cuenta. No pretendía insistir en sustituirlo. Puedo enviarte la ubicación exacta para que se la pases, o dejamos aquí la conversación.",
+      "responses": [
+        { "id": "r1", "label": "Envíamelo", "next": "n_send", "tone": "advance" },
+        { "id": "r2", "label": "Déjalo", "next": "n_close", "tone": "close" }
+      ]
+    },
+    {
+      "id": "n_offer_evidence",
+      "say": "Perfecto. ¿Prefieres que te lo envíe por correo o por WhatsApp?",
+      "responses": [
+        { "id": "r1", "label": "Por correo", "next": "n_send", "tone": "advance" },
+        { "id": "r2", "label": "Por WhatsApp", "next": "n_send", "tone": "advance" }
+      ]
+    },
+    { "id": "n_send", "say": "Perfecto, te lo envío. Gracias por tu tiempo.", "terminal": { "outcome": "send_evidence" } },
+    { "id": "n_close", "say": "Entendido. Gracias por atenderme.", "terminal": { "outcome": "closed" } }
+  ]
+}

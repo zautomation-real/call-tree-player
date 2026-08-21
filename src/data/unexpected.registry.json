@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0.0",
+  "entries": [
+    {
+      "id": "how_got_number",
+      "label": "¿Cómo has conseguido mi número?",
+      "category": "Dudas",
+      "keywords": ["número", "contacto", "datos"],
+      "behavior": "return",
+      "tone": "clarify",
+      "say": "He utilizado el teléfono profesional publicado por la empresa. Si prefieres que no vuelva a utilizarlo, lo dejo registrado.",
+      "responses": [
+        { "id": "continue", "label": "Continuar conversación", "next": "@return", "tone": "neutral" }
+      ]
+    },
+    {
+      "id": "wrong_person",
+      "label": "No soy la persona adecuada",
+      "category": "Contacto",
+      "keywords": ["persona", "responsable", "web"],
+      "behavior": "branch",
+      "tone": "handoff",
+      "say": "Gracias. ¿Quién sería la persona adecuada para hablar de la web?",
+      "responses": [
+        { "id": "name", "label": "Te digo su nombre", "next": "@return", "tone": "handoff" },
+        { "id": "unknown", "label": "No lo sé", "next": "@return", "tone": "neutral" }
+      ]
+    },
+    {
+      "id": "do_not_contact",
+      "label": "No vuelvas a contactar",
+      "category": "Cierre",
+      "keywords": ["no contactar", "borrar", "no llamar"],
+      "behavior": "end",
+      "tone": "close",
+      "say": "Entendido. Lo dejo registrado y no volveré a contactar. Gracias.",
+      "responses": [
+        { "id": "finish", "label": "Finalizar llamada", "next": "@end:do_not_contact", "tone": "close" }
+      ]
+    }
+  ]
+}

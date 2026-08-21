@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "script_id": "unexpected-override-001",
+  "title": "Override inesperado",
+  "company": { "name": "Empresa Ejemplo" },
+  "start_node": "n1",
+  "outcomes": [
+    { "id": "done", "label": "Finalizada" },
+    { "id": "wrong_contact", "label": "Contacto incorrecto" }
+  ],
+  "unexpected_routes": { "wrong_person": "n_wrong_person" },
+  "nodes": [
+    {
+      "id": "n1",
+      "say": "¿Eres la persona que coordina la web?",
+      "responses": [
+        { "id": "r1", "label": "Sí", "next": "n_done", "tone": "advance" },
+        { "id": "r2", "label": "No", "next": "n_wrong_person", "tone": "handoff" }
+      ]
+    },
+    {
+      "id": "n_wrong_person",
+      "say": "Gracias. ¿Quién sería la persona adecuada y cómo puedo localizarla?",
+      "responses": [
+        { "id": "r1", "label": "Te doy su nombre", "next": "n_done", "tone": "handoff" },
+        { "id": "r2", "label": "No lo sé", "next": "n_end_wrong", "tone": "neutral" }
+      ]
+    },
+    { "id": "n_done", "say": "Perfecto, gracias.", "terminal": { "outcome": "done" } },
+    { "id": "n_end_wrong", "say": "Entendido, gracias por tu tiempo.", "terminal": { "outcome": "wrong_contact" } }
+  ]
+}
