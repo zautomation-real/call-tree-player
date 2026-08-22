@@ -54,6 +54,16 @@ describe('Call Tree Player', () => {
     expect(screen.getByRole('heading', { name: /podría hablar con Marta/i })).toBeVisible()
   })
 
+  it('abre y copia el prompt para generar un archivo', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: 'Prompt para generar tu .call.json' }))
+    expect(screen.getByRole('dialog', { name: 'Prompt para generar tu .call.json' })).toBeVisible()
+    expect(screen.getByRole<HTMLTextAreaElement>('textbox', { name: 'Prompt para generar el archivo' }).value).toContain('CONTRATO JSON OBLIGATORIO')
+    await user.click(screen.getByRole('button', { name: 'Copiar prompt' }))
+    expect(screen.getByRole('button', { name: 'Prompt copiado' })).toBeVisible()
+  })
+
   it('el teclado y el clic producen la misma navegación', async () => {
     await openReady(minimal)
     fireEvent.keyDown(document, { key: '1' })

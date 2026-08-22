@@ -4,9 +4,12 @@ import { hashText } from '../services/hashing'
 import { clearAll, loadStored, saveImportedScript, saveSession } from '../services/persistence'
 import { downloadSessionLog } from '../services/sessionLog'
 import { parseAndValidate, unexpectedRegistry, validateCallScript } from '../services/validation'
+import promptDocument from '../../PROMPT_CREAR_CALL_JSON.md?raw'
 
 type Screen = 'import' | 'ready' | 'call' | 'end'
-type Overlay = 'restore' | 'replace' | 'unexpected' | 'evidence' | null
+type Overlay = 'restore' | 'replace' | 'unexpected' | 'evidence' | 'prompt' | null
+
+const generatorPrompt = promptDocument.match(/```text\r?\n([\s\S]*?)\r?\n```/)?.[1].trim() ?? promptDocument.trim()
 
 function now(): string { return new Date().toISOString() }
 function makeSession(script: CallScript, hash: string): SessionState {
@@ -111,6 +114,7 @@ export function App() {
   const [warnings, setWarnings] = useState<string[]>([])
   const [warningsAccepted, setWarningsAccepted] = useState(false)
   const [runtimeError, setRuntimeError] = useState('')
+  const [promptCopyStatus, setPromptCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle')
   const [pendingReplacement, setPendingReplacement] = useState<{ script: CallScript; raw: string; hash: string; warnings: string[] } | null>(null)
   const [registryQuery, setRegistryQuery] = useState('')
   const [registryCategory, setRegistryCategory] = useState('Todas')
@@ -160,9 +164,19 @@ export function App() {
 
   const closeOverlay = useCallback(() => {
     setOverlay(null)
+    setPromptCopyStatus('idle')
     requestAnimationFrame(() => {
       if (!document.querySelector('[role="dialog"]')) overlayTriggerRef.current?.focus()
     })
+  }, [])
+
+  const copyGeneratorPrompt = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(generatorPrompt)
+      setPromptCopyStatus('copied')
+    } catch {
+      setPromptCopyStatus('error')
+    }
   }, [])
 
   const applyImport = useCallback((nextScript: CallScript, raw: string, hash: string, nextWarnings: string[]) => {
@@ -354,6 +368,7 @@ export function App() {
           <input ref={fileInputRef} className="visually-hidden" id="script-file" type="file" accept=".json,.call.json,application/json" onChange={(event) => void importFile(event.target.files?.[0])} />
           <button className="primary-button" type="button" onClick={() => fileInputRef.current?.click()}>Seleccionar archivo</button>
           <p className="format-note">Formato aceptado: .call.json</p>
+          <button className="prompt-button" type="button" onClick={() => { setPromptCopyStatus('idle'); setOverlay('prompt') }}>Prompt para generar tu .call.json</button>
           {!!errors.length && <div className="message error-message" role="alert"><strong>No se puede cargar el archivo</strong><ul>{errors.map((error) => <li key={error}>{error}</li>)}</ul></div>}
         </section>
         <BrandCredit />
@@ -373,6 +388,15 @@ export function App() {
             <div className="dialog-actions">
               <button autoFocus className="primary-button" type="button" onClick={() => applyImport(pendingReplacement.script, pendingReplacement.raw, pendingReplacement.hash, pendingReplacement.warnings)}>Reemplazar sesión</button>
               <button type="button" onClick={() => { setPendingReplacement(null); setOverlay(null) }}>Cancelar</button>
+            </div>
+          </Dialog>
+        )}
+        {overlay === 'prompt' && (
+          <Dialog title="Prompt para generar tu .call.json" labelledBy="prompt-title" onClose={closeOverlay}>
+            <textarea className="prompt-textarea" readOnly value={generatorPrompt} aria-label="Prompt para generar el archivo" />
+            <div className="dialog-actions prompt-actions">
+              <button autoFocus className="primary-button" type="button" onClick={() => void copyGeneratorPrompt()}>{promptCopyStatus === 'copied' ? 'Prompt copiado' : 'Copiar prompt'}</button>
+              {promptCopyStatus === 'error' && <span className="copy-error" role="alert">No se pudo copiar. Selecciona el texto manualmente.</span>}
             </div>
           </Dialog>
         )}

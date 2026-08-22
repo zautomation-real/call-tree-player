@@ -62,6 +62,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
   cursor: pointer;
 }
 .primary-button { border-color: #3f82c8 !important; background: #2f6fb2 !important; }
+.prompt-button { margin-top: 6px; border-color: #7c6926 !important; background: #282416 !important; color: #f8dc75; }
 button:disabled { cursor: not-allowed; opacity: .42; }
 .message { margin-top: 22px; padding: 16px 18px; border: 1px solid var(--border); border-radius: 12px; text-align: left; }
 .message ul { margin: 9px 0 0; padding-left: 20px; }
@@ -76,6 +77,9 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 .summary-grid dt { color: var(--muted); font-size: 13px; font-weight: 800; text-transform: uppercase; }
 .summary-grid dd { margin: 5px 0 0; font-size: 18px; font-weight: 750; overflow-wrap: anywhere; }
 .dialog-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.prompt-textarea { width: 100%; height: min(56dvh, 560px); resize: vertical; padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: #0f151d; color: #e8edf3; font: 14px/1.5 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; }
+.prompt-actions { align-items: center; }
+.copy-error { color: #ffd8d8; font-size: 14px; }
 
 .call-screen { display: grid; grid-template-rows: 56px minmax(0, 1fr); }
 .call-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 24px; border-bottom: 1px solid var(--border); background: #10151d; }
