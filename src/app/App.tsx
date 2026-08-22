@@ -89,7 +89,13 @@ function ResponseButton({ response, index, onClick }: { response: Response; inde
 }
 
 function BrandCredit({ utility = false }: { utility?: boolean }) {
-  const credit = <a href="https://websdelcamp.cat/?utm_source=call-tree-player&utm_medium=referral&utm_campaign=free-tool" target="_blank" rel="noopener noreferrer">Ofrecido por <strong>Webs del Camp</strong></a>
+  const credit = (
+    <a className="brand-credit__link" href="https://websdelcamp.cat/?utm_source=call-tree-player&utm_medium=referral&utm_campaign=free-tool" target="_blank" rel="noopener noreferrer" aria-label="Visitar Webs del Camp">
+      <img src="./favicon.svg" alt="" aria-hidden="true" />
+      <span className="brand-credit__copy"><small>Ofrecido por</small><strong>Webs del Camp</strong></span>
+      <span className="brand-credit__arrow" aria-hidden="true">↗</span>
+    </a>
+  )
   if (utility) return <span className="brand-credit brand-credit--utility">{credit}</span>
   return <footer className="brand-credit brand-credit--floating">{credit}</footer>
 }
