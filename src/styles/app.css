@@ -26,6 +26,12 @@ button { color: var(--text); }
 button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .screen { width: 100%; height: 100dvh; background: var(--bg); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.brand-credit { color: var(--muted); font-size: 13px; }
+.brand-credit a { color: inherit; text-decoration: none; }
+.brand-credit a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+.brand-credit strong { color: #f4c95d; font-weight: 800; }
+.brand-credit--floating { position: fixed; right: 20px; bottom: 16px; }
+.brand-credit--utility { text-align: right; }
 
 .import-screen, .summary-screen, .end-screen, .fatal-screen { display: grid; place-items: center; padding: 28px; overflow: auto; }
 .import-card, .summary-card, .end-card {
@@ -138,6 +144,9 @@ button:disabled { cursor: not-allowed; opacity: .42; }
   .response-grid.odd .response:last-child { grid-column: auto; width: auto; }
   .response { min-height: 70px; padding: 11px 15px 11px 54px; font-size: 18px; }
   .utility-bar { padding: 0 10px; }.utility-bar button { padding: 8px 10px; font-size: 14px; }.unexpected-button, .finish-button { min-width: 180px; }
+  .brand-credit--floating { right: 12px; bottom: 9px; font-size: 11px; }
+  .brand-credit--utility { font-size: 10px; }
+  .brand-credit--utility a { display: inline-grid; }
   .overlay { padding: 12px; }.panel { max-height: 94dvh; padding: 18px; }.registry-grid { grid-template-columns: 1fr; }.registry-item { min-height: 76px; }
   .vertical-mobile { flex-direction: column; }.vertical-mobile button { width: 100%; }
   .end-stats { margin: 36px 0; }

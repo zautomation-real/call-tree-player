@@ -88,6 +88,12 @@ function ResponseButton({ response, index, onClick }: { response: Response; inde
   )
 }
 
+function BrandCredit({ utility = false }: { utility?: boolean }) {
+  const credit = <a href="https://websdelcamp.cat/?utm_source=call-tree-player&utm_medium=referral&utm_campaign=free-tool" target="_blank" rel="noopener noreferrer">Ofrecido por <strong>Webs del Camp</strong></a>
+  if (utility) return <span className="brand-credit brand-credit--utility">{credit}</span>
+  return <footer className="brand-credit brand-credit--floating">{credit}</footer>
+}
+
 export function App() {
   const [screen, setScreen] = useState<Screen>('import')
   const [overlay, setOverlay] = useState<Overlay>(null)
@@ -344,6 +350,7 @@ export function App() {
           <p className="format-note">Formato aceptado: .call.json</p>
           {!!errors.length && <div className="message error-message" role="alert"><strong>No se puede cargar el archivo</strong><ul>{errors.map((error) => <li key={error}>{error}</li>)}</ul></div>}
         </section>
+        <BrandCredit />
         {overlay === 'restore' && script && session && (
           <Dialog title="Sesión guardada" labelledBy="restore-title">
             <p>Hay una sesión de <strong>{script.company.name}</strong>. Elige cómo continuar.</p>
@@ -387,6 +394,7 @@ export function App() {
             <button type="button" onClick={loadAnother}>Cargar otro archivo</button>
           </div>
         </section>
+        <BrandCredit />
       </main>
     )
   }
@@ -408,12 +416,13 @@ export function App() {
             <button type="button" onClick={loadAnother}>Cargar otro guion</button>
           </div>
         </section>
+        <BrandCredit />
       </main>
     )
   }
 
   if (screen !== 'call' || !script || !session || !activeNode) {
-    return <main className="screen fatal-screen"><h1>No se puede mostrar la sesión</h1><button type="button" onClick={loadAnother}>Cargar otro archivo</button></main>
+    return <main className="screen fatal-screen"><h1>No se puede mostrar la sesión</h1><button type="button" onClick={loadAnother}>Cargar otro archivo</button><BrandCredit /></main>
   }
 
   const responses = activeNode.responses ?? []
@@ -439,7 +448,7 @@ export function App() {
         <footer className="utility-bar">
           <div>{callNode?.evidence?.length ? <button type="button" onClick={(event) => { overlayTriggerRef.current = event.currentTarget; setOverlay('evidence') }}>Evidencia</button> : null}</div>
           <div>{callNode?.responses ? <button type="button" className="unexpected-button" onClick={(event) => openUnexpected(event.currentTarget)}>Respuesta inesperada</button> : callNode?.terminal ? <button type="button" className="finish-button" onClick={finishCall}>Finalizar llamada</button> : null}</div>
-          <div />
+          <div><BrandCredit utility /></div>
         </footer>
       </div>
       {runtimeError && <div className="runtime-error" role="alert"><span>{runtimeError}</span><button type="button" onClick={() => setRuntimeError('')}>Cerrar</button></div>}
