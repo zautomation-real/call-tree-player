@@ -2,7 +2,7 @@
 
 Convierte un guion de llamada ramificado en una interfaz que te dice qué pronunciar y te permite avanzar según lo que responda la otra persona.
 
-> **[Abrir Call Tree Player](https://zautomation-real.github.io/call-tree-player/)**  
+> **[Abrir Call Tree Player](https://zautomation-real.github.io/call-tree-player/)**
 > Funciona en el navegador, sin registro y sin subir tu guion a ningún servidor.
 
 ![Call Tree Player durante una llamada](artifacts/screenshots/desktop-1440x900.png)
@@ -43,4 +43,3 @@ Solo se realizará una petición externa si el propio guion contiene una imagen 
 ## ¿Te resulta útil?
 
 **[Dale una estrella al repositorio](https://github.com/zautomation-real/call-tree-player)** para ayudar a que más personas encuentren el reproductor. Para usarlo, vuelve siempre a la **[aplicación web](https://zautomation-real.github.io/call-tree-player/)**.
-
