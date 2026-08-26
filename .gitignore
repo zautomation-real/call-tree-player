@@ -9,3 +9,4 @@ vite.config.d.ts
 .env*
 !.env.example
 *.log
+PROMPT_CALL_JSON_RESET_COMERCIAL.md
