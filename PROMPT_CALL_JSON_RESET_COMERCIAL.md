@@ -118,8 +118,9 @@ RESPUESTA CONTEXTUAL
 - Si después de la observación el interlocutor guarda silencio, responde solo
   «dime», «vale», «no sé» o no contesta a la pregunta, no añadas otro hallazgo
   para llenar el vacío. Recupera únicamente la pregunta discriminante en una
-  frase cerrada: «Solo necesito confirmar esto: ¿[hipótesis A] o [hipótesis B]?». 
-  Cuando esa reacción sea plausible para la cuenta, debe vivir en una opción
+  frase cerrada:
+  «Confírmame solo esto: ¿[hipótesis A] o [hipótesis B]?». Esta reacción, cuando
+  sea plausible para la cuenta, debe vivir en una opción
   visible del nodo de observación antes que una objeción defensiva improbable.
 - No atribuyas el hallazgo al proveedor, a una plantilla o a un descuido aunque
   parezca evidente. Pregunta primero si lo gestionan internamente o con un
