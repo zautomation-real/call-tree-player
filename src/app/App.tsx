@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent, type KeyboardEvent, type ReactNode } from 'react'
-import type { CallNode, CallScript, HistoryEntry, Response, SessionState, UnexpectedEntry } from './types'
+import type { CallNode, CallScript, HistoryEntry, Language, Response, SessionState, UnexpectedEntry } from './types'
 import { hashText } from '../services/hashing'
 import { clearAll, loadStored, saveImportedScript, saveSession } from '../services/persistence'
 import { downloadSessionLog } from '../services/sessionLog'
 import { parseAndValidate, unexpectedRegistry, validateCallScript } from '../services/validation'
+import { allText, resolveText } from '../services/localization'
 import promptDocument from '../../PROMPT_CREAR_CALL_JSON.md?raw'
 
 type Screen = 'import' | 'ready' | 'call' | 'end'
@@ -22,6 +23,7 @@ function makeSession(script: CallScript, hash: string): SessionState {
     updatedAt: timestamp,
     status: 'ready',
     context: 'call',
+    language: script.default_language ?? 'es',
     currentId: script.start_node,
     history: [],
     events: [],
@@ -82,11 +84,12 @@ function Dialog({ title, onClose, children, labelledBy, closeLabel = 'Cerrar' }:
   )
 }
 
-function ResponseButton({ response, index, onClick }: { response: Response; index: number; onClick: () => void }) {
+function ResponseButton({ response, index, language, onClick }: { response: Response; index: number; language: Language; onClick: () => void }) {
+  const label = resolveText(response.label, language)
   return (
-    <button className={`response tone-${response.tone ?? 'neutral'}`} type="button" aria-label={`${index + 1}: ${response.label}`} onClick={onClick}>
+    <button className={`response tone-${response.tone ?? 'neutral'}`} type="button" aria-label={`${index + 1}: ${label}`} onClick={onClick}>
       <span className="shortcut" aria-hidden="true">{index + 1}</span>
-      <span>{response.label}</span>
+      <span>{label}</span>
     </button>
   )
 }
@@ -117,7 +120,7 @@ export function App() {
   const [promptCopyStatus, setPromptCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle')
   const [pendingReplacement, setPendingReplacement] = useState<{ script: CallScript; raw: string; hash: string; warnings: string[] } | null>(null)
   const [registryQuery, setRegistryQuery] = useState('')
-  const [registryCategory, setRegistryCategory] = useState('Todas')
+  const [registryCategory, setRegistryCategory] = useState('@all')
   const [registryIndex, setRegistryIndex] = useState(0)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -161,6 +164,14 @@ export function App() {
     return unexpectedRegistry.entries.find((entry) => entry.id === session.currentId)
   }, [session])
   const activeNode = callNode ?? unexpectedNode
+  const language = session?.language ?? script?.default_language ?? 'es'
+  const activeSay = activeNode ? resolveText(activeNode.say, language) : ''
+
+  const switchLanguage = useCallback((nextLanguage: Language) => {
+    if (!session || session.language === nextLanguage) return
+    persistSession({ ...session, language: nextLanguage })
+    setRegistryCategory('@all')
+  }, [persistSession, session])
 
   const closeOverlay = useCallback(() => {
     setOverlay(null)
@@ -264,21 +275,21 @@ export function App() {
       ...session,
       currentId: response.next,
       history: [...session.history, { context: 'call', id: callNode.id }],
-      events: [...session.events, { type: 'response', nodeId: callNode.id, responseId: response.id, label: response.label, at: now() }],
+      events: [...session.events, { type: 'response', nodeId: callNode.id, responseId: response.id, label: resolveText(response.label, language), language, at: now() }],
     })
-  }, [callNode, persistSession, script, session])
+  }, [callNode, language, persistSession, script, session])
 
   const openUnexpected = useCallback((trigger?: HTMLElement) => {
     if (!callNode?.responses) return
     overlayTriggerRef.current = trigger ?? document.activeElement as HTMLElement
-    setRegistryQuery(''); setRegistryCategory('Todas'); setRegistryIndex(0); setOverlay('unexpected')
+    setRegistryQuery(''); setRegistryCategory('@all'); setRegistryIndex(0); setOverlay('unexpected')
   }, [callNode])
 
   const selectUnexpected = useCallback((entry: UnexpectedEntry) => {
     if (!script || !session) return
     const origin: HistoryEntry = { context: session.context, id: session.currentId }
     const override = script.unexpected_routes?.[entry.id]
-    const baseEvents = [...session.events, { type: 'unexpected_selected', entryId: entry.id, label: entry.label, at: now() }]
+    const baseEvents = [...session.events, { type: 'unexpected_selected', entryId: entry.id, label: resolveText(entry.label, language), language, at: now() }]
     if (override) {
       persistSession({ ...session, context: 'call', currentId: override, history: [...session.history, origin], events: baseEvents })
     } else {
@@ -286,11 +297,11 @@ export function App() {
     }
     setOverlay(null)
     setScreen('call')
-  }, [persistSession, script, session])
+  }, [language, persistSession, script, session])
 
   const chooseUnexpected = useCallback((response: Response) => {
     if (!session || !unexpectedNode) return
-    const events = [...session.events, { type: 'unexpected_response', entryId: unexpectedNode.id, responseId: response.id, label: response.label, at: now() }]
+    const events = [...session.events, { type: 'unexpected_response', entryId: unexpectedNode.id, responseId: response.id, label: resolveText(response.label, language), language, at: now() }]
     if (response.next === '@return') {
       const history = [...session.history]
       const origin = history.pop()
@@ -312,7 +323,7 @@ export function App() {
       history: [...session.history, { context: 'unexpected', id: unexpectedNode.id }],
       events,
     })
-  }, [persistSession, session, unexpectedNode])
+  }, [language, persistSession, session, unexpectedNode])
 
   const finishCall = useCallback(() => {
     if (!session || !callNode?.terminal) return
@@ -338,15 +349,16 @@ export function App() {
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [activeNode, callNode, chooseUnexpected, goBack, navigateCall, openUnexpected, overlay, screen, session?.context])
 
-  const categories = useMemo(() => ['Todas', ...new Set(unexpectedRegistry.entries.map((entry) => entry.category))], [])
+  const allCategoryLabel = language === 'ca' ? 'Totes' : 'Todas'
+  const categories = useMemo(() => ['@all', ...new Set(unexpectedRegistry.entries.map((entry) => resolveText(entry.category, language)))], [language])
   const registryResults = useMemo(() => {
     const query = registryQuery.trim().toLocaleLowerCase('es')
     return unexpectedRegistry.entries.filter((entry) => {
-      const categoryMatches = registryCategory === 'Todas' || entry.category === registryCategory
-      const haystack = [entry.label, entry.category, ...entry.keywords].join(' ').toLocaleLowerCase('es')
+      const categoryMatches = registryCategory === '@all' || resolveText(entry.category, language) === registryCategory
+      const haystack = [...allText(entry.label), ...allText(entry.category), ...entry.keywords].join(' ').toLocaleLowerCase(language)
       return categoryMatches && (!query || haystack.includes(query))
     }).slice(0, 12)
-  }, [registryCategory, registryQuery])
+  }, [language, registryCategory, registryQuery])
   useEffect(() => setRegistryIndex(0), [registryCategory, registryQuery])
 
   function registryKeys(event: KeyboardEvent<HTMLInputElement>) {
@@ -438,7 +450,7 @@ export function App() {
       <main className="screen end-screen">
         <section className="end-card">
           <p className="eyebrow">Llamada finalizada</p>
-          <h1>{outcome?.label ?? session.outcomeId ?? 'Finalizada'}</h1>
+          <h1>{outcome ? resolveText(outcome.label, language) : session.outcomeId ?? 'Finalizada'}</h1>
           <p className="end-stats">{selections} selecciones · {duration}</p>
           <div className="dialog-actions vertical-mobile">
             <button type="button" onClick={() => downloadSessionLog(script, session)}>Descargar registro</button>
@@ -461,18 +473,23 @@ export function App() {
       <header className="call-header">
         <div className="company-block"><strong>{script.company.name}</strong><span>{[script.company.contact_name, script.company.contact_role, script.company.phone].filter(Boolean).join(' · ')}</span></div>
         <div className="header-actions">
+          <div className="language-switch" role="group" aria-label="Idioma del guion">
+            <button type="button" aria-pressed={language === 'ca'} onClick={() => switchLanguage('ca')}>CAT</button>
+            <span aria-hidden="true">|</span>
+            <button type="button" aria-pressed={language === 'es'} onClick={() => switchLanguage('es')}>ES</button>
+          </div>
           <button type="button" className="back-button" disabled={!session.history.length} onClick={goBack}>← Volver</button>
           <button type="button" className="close-script-button" onClick={loadAnother}>Cerrar guion</button>
         </div>
       </header>
       <div className="call-main">
         <section className="say-zone" aria-labelledby="caller-text">
-          <h1 id="caller-text" className={callerTextClass(activeNode.say)} ref={headingRef} tabIndex={-1}>{activeNode.say}</h1>
+          <h1 id="caller-text" className={callerTextClass(activeSay)} ref={headingRef} tabIndex={-1}>{activeSay}</h1>
         </section>
         <section className="responses-zone" aria-labelledby="response-heading">
           {responses.length > 0 && <h2 id="response-heading">{session.context === 'call' ? '¿Qué ha respondido el cliente?' : '¿Qué ocurre ahora?'}</h2>}
           {responses.length > 0 && <div className={`response-grid ${responses.length % 2 ? 'odd' : ''}`}>
-            {responses.map((response, index) => <ResponseButton key={response.id} response={response} index={index} onClick={() => session.context === 'unexpected' ? chooseUnexpected(response) : navigateCall(response)} />)}
+            {responses.map((response, index) => <ResponseButton key={response.id} response={response} index={index} language={language} onClick={() => session.context === 'unexpected' ? chooseUnexpected(response) : navigateCall(response)} />)}
           </div>}
         </section>
         <footer className="utility-bar">
@@ -485,16 +502,16 @@ export function App() {
       {overlay === 'unexpected' && (
         <Dialog title="Respuesta inesperada" labelledBy="unexpected-title" onClose={closeOverlay}>
           <input autoFocus className="search-input" type="search" placeholder="Buscar respuesta…" aria-label="Buscar respuesta inesperada" value={registryQuery} onChange={(event) => setRegistryQuery(event.target.value)} onKeyDown={registryKeys} />
-          <div className="category-chips" aria-label="Categorías">{categories.map((category) => <button className={category === registryCategory ? 'active' : ''} type="button" key={category} onClick={() => setRegistryCategory(category)}>{category}</button>)}</div>
+          <div className="category-chips" aria-label="Categorías">{categories.map((category) => <button className={category === registryCategory ? 'active' : ''} type="button" key={category} onClick={() => setRegistryCategory(category)}>{category === '@all' ? allCategoryLabel : category}</button>)}</div>
           <div className="registry-grid" role="listbox" aria-label="Respuestas inesperadas">
-            {registryResults.map((entry, index) => <button className={index === registryIndex ? 'registry-item selected' : 'registry-item'} role="option" aria-selected={index === registryIndex} type="button" key={entry.id} onMouseEnter={() => setRegistryIndex(index)} onClick={() => selectUnexpected(entry)}><span>{entry.category}</span>{entry.label}</button>)}
+            {registryResults.map((entry, index) => <button className={index === registryIndex ? 'registry-item selected' : 'registry-item'} role="option" aria-selected={index === registryIndex} type="button" key={entry.id} onMouseEnter={() => setRegistryIndex(index)} onClick={() => selectUnexpected(entry)}><span>{resolveText(entry.category, language)}</span>{resolveText(entry.label, language)}</button>)}
             {!registryResults.length && <p className="empty-results">No hay coincidencias.</p>}
           </div>
         </Dialog>
       )}
       {overlay === 'evidence' && callNode?.evidence && (
         <Dialog title="Evidencia" labelledBy="evidence-title" onClose={closeOverlay}>
-          <div className="evidence-list">{callNode.evidence.map((item, index) => <article className="evidence-card" key={`${item.title}-${index}`}><h3>{item.title}</h3>{item.text && <p>{item.text}</p>}{item.image_url && <img src={item.image_url} alt={item.text || item.title} onError={(event) => { event.currentTarget.hidden = true }} />}{item.url && <a href={item.url} target="_blank" rel="noopener noreferrer">Abrir fuente</a>}</article>)}</div>
+          <div className="evidence-list">{callNode.evidence.map((item, index) => { const title = resolveText(item.title, language); const evidenceText = item.text ? resolveText(item.text, language) : ''; return <article className="evidence-card" key={`${title}-${index}`}><h3>{title}</h3>{evidenceText && <p>{evidenceText}</p>}{item.image_url && <img src={item.image_url} alt={evidenceText || title} onError={(event) => { event.currentTarget.hidden = true }} />}{item.url && <a href={item.url} target="_blank" rel="noopener noreferrer">Abrir fuente</a>}</article> })}</div>
         </Dialog>
       )}
     </main>

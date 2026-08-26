@@ -7,11 +7,13 @@ import minimalData from '../fixtures/valid/minimal.call.json'
 import repeatedData from '../fixtures/valid/repeated-provider.call.json'
 import evidenceData from '../fixtures/valid/evidence.call.json'
 import overrideData from '../fixtures/valid/unexpected-override.call.json'
+import bilingualData from '../fixtures/valid/bilingual.call.json'
 
 const minimal = minimalData as CallScript
 const repeated = repeatedData as CallScript
 const evidence = evidenceData as CallScript
 const override = overrideData as CallScript
+const bilingual = bilingualData as CallScript
 
 function seed(script: CallScript, options: Partial<SessionState> = {}) {
   const hash = 'fixture-hash'
@@ -59,7 +61,11 @@ describe('Call Tree Player', () => {
     render(<App />)
     await user.click(screen.getByRole('button', { name: 'Prompt para generar tu .call.json' }))
     expect(screen.getByRole('dialog', { name: 'Prompt para generar tu .call.json' })).toBeVisible()
-    expect(screen.getByRole<HTMLTextAreaElement>('textbox', { name: 'Prompt para generar el archivo' }).value).toContain('CONTRATO JSON OBLIGATORIO')
+    const copiedPrompt = screen.getByRole<HTMLTextAreaElement>('textbox', { name: 'Prompt para generar el archivo' }).value
+    expect(copiedPrompt).toContain('CONTRATO JSON OBLIGATORIO')
+    expect(copiedPrompt).toContain('"default_language": "es"')
+    expect(copiedPrompt).toContain('BILINGÜE ES+CA')
+    expect(copiedPrompt).not.toContain('LEGACY')
     await user.click(screen.getByRole('button', { name: 'Copiar prompt' }))
     expect(screen.getByRole('button', { name: 'Prompt copiado' })).toBeVisible()
   })
@@ -70,6 +76,20 @@ describe('Call Tree Player', () => {
     expect(screen.getByRole('heading', { name: /quería comentarte/i })).toBeVisible()
     fireEvent.keyDown(document, { key: 'Backspace' })
     expect(screen.getByRole('heading', { name: /podría hablar con Marta/i })).toBeVisible()
+  })
+
+  it('cambia entre catalán y español sin alterar la ruta', async () => {
+    const user = await openReady(bilingual)
+    expect(screen.getByRole('heading', { name: 'Hola, podria parlar amb la Marta?' })).toBeVisible()
+    expect(screen.getByRole('button', { name: 'CAT' })).toHaveAttribute('aria-pressed', 'true')
+    fireEvent.keyDown(document, { key: 'u' })
+    await user.click(screen.getByRole('option', { name: /Com has aconseguit el meu número/i }))
+    expect(screen.getByRole('heading', { name: /telèfon professional publicat/i })).toBeVisible()
+    await user.click(screen.getByRole('button', { name: '1: Continuar la conversa' }))
+    await user.click(screen.getByRole('button', { name: 'ES' }))
+    expect(screen.getByRole('heading', { name: 'Hola, ¿podría hablar con Marta?' })).toBeVisible()
+    await user.click(screen.getByRole('button', { name: '1: Sí, soy yo' }))
+    expect(screen.getByRole('heading', { name: 'Gracias por atenderme.' })).toBeVisible()
   })
 
   it('mantiene visible una respuesta repetida en momentos distintos', async () => {

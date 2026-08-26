@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "default_language": "ca",
+  "script_id": "bilingual-demo-001",
+  "title": "Guion bilingüe de prueba",
+  "company": {
+    "name": "Empresa Exemple",
+    "contact_name": "Marta",
+    "phone": "+34 900 000 000"
+  },
+  "start_node": "identity",
+  "outcomes": [
+    {
+      "id": "connected",
+      "label": { "es": "Contacto conseguido", "ca": "Contacte aconseguit" }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "identity",
+      "say": {
+        "es": "Hola, ¿podría hablar con Marta?",
+        "ca": "Hola, podria parlar amb la Marta?"
+      },
+      "responses": [
+        {
+          "id": "yes",
+          "label": { "es": "Sí, soy yo", "ca": "Sí, soc jo" },
+          "next": "close",
+          "tone": "advance"
+        },
+        {
+          "id": "absent",
+          "label": { "es": "No está disponible", "ca": "No està disponible" },
+          "next": "close",
+          "tone": "handoff"
+        }
+      ]
+    },
+    {
+      "id": "close",
+      "say": {
+        "es": "Gracias por atenderme.",
+        "ca": "Gràcies per atendre'm."
+      },
+      "terminal": { "outcome": "connected" }
+    }
+  ]
+}

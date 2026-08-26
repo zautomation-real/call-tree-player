@@ -15,6 +15,8 @@ Convierte un guion de llamada ramificado en una interfaz que te dice qué pronun
 4. Revisa el resumen y pulsa **Iniciar llamada**.
 5. Elige en cada pantalla la respuesta que más se aproxime a lo que escuchas. El reproductor te llevará al siguiente fragmento del guion.
 
+Los guiones bilingües permiten cambiar en cualquier momento entre **CAT** y **ES** sin perder el punto de la conversación.
+
 **[Crear mi guion y abrir el reproductor →](PROMPT_CREAR_CALL_JSON.md)**
 
 ## Qué resuelve
@@ -39,6 +41,7 @@ Solo se realizará una petición externa si el propio guion contiene una imagen 
 - `U`: abrir **Respuesta inesperada**.
 - `E`: abrir **Evidencia**, cuando exista.
 - `Escape`: cerrar el diálogo activo.
+- `CAT | ES`: cambiar el idioma del guion sin cambiar de ruta.
 
 ## ¿Te resulta útil?
 

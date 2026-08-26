@@ -1,41 +1,51 @@
 {
   "schema_version": "1.0.0",
+  "default_language": "es",
   "entries": [
     {
       "id": "how_got_number",
-      "label": "¿Cómo has conseguido mi número?",
-      "category": "Dudas",
-      "keywords": ["número", "contacto", "datos"],
+      "label": { "es": "¿Cómo has conseguido mi número?", "ca": "Com has aconseguit el meu número?" },
+      "category": { "es": "Dudas", "ca": "Dubtes" },
+      "keywords": ["número", "contacto", "datos", "contacte", "dades"],
       "behavior": "return",
       "tone": "clarify",
-      "say": "He utilizado el teléfono profesional publicado por la empresa. Si prefieres que no vuelva a utilizarlo, lo dejo registrado.",
+      "say": {
+        "es": "He utilizado el teléfono profesional publicado por la empresa. Si prefieres que no vuelva a utilizarlo, lo dejo registrado.",
+        "ca": "He utilitzat el telèfon professional publicat per l'empresa. Si prefereixes que no el torni a utilitzar, ho deixo registrat."
+      },
       "responses": [
-        { "id": "continue", "label": "Continuar conversación", "next": "@return", "tone": "neutral" }
+        { "id": "continue", "label": { "es": "Continuar conversación", "ca": "Continuar la conversa" }, "next": "@return", "tone": "neutral" }
       ]
     },
     {
       "id": "wrong_person",
-      "label": "No soy la persona adecuada",
-      "category": "Contacto",
-      "keywords": ["persona", "responsable", "web"],
+      "label": { "es": "No soy la persona adecuada", "ca": "No soc la persona adequada" },
+      "category": { "es": "Contacto", "ca": "Contacte" },
+      "keywords": ["persona", "responsable", "web", "adequada"],
       "behavior": "branch",
       "tone": "handoff",
-      "say": "Gracias. ¿Quién sería la persona adecuada para hablar de la web?",
+      "say": {
+        "es": "Gracias. ¿Quién sería la persona adecuada para hablar de la web?",
+        "ca": "Gràcies. Qui seria la persona adequada per parlar del web?"
+      },
       "responses": [
-        { "id": "name", "label": "Te digo su nombre", "next": "@return", "tone": "handoff" },
-        { "id": "unknown", "label": "No lo sé", "next": "@return", "tone": "neutral" }
+        { "id": "name", "label": { "es": "Te digo su nombre", "ca": "Et dic el seu nom" }, "next": "@return", "tone": "handoff" },
+        { "id": "unknown", "label": { "es": "No lo sé", "ca": "No ho sé" }, "next": "@return", "tone": "neutral" }
       ]
     },
     {
       "id": "do_not_contact",
-      "label": "No vuelvas a contactar",
-      "category": "Cierre",
-      "keywords": ["no contactar", "borrar", "no llamar"],
+      "label": { "es": "No vuelvas a contactar", "ca": "No tornis a contactar" },
+      "category": { "es": "Cierre", "ca": "Tancament" },
+      "keywords": ["no contactar", "borrar", "no llamar", "no trucar", "esborrar"],
       "behavior": "end",
       "tone": "close",
-      "say": "Entendido. Lo dejo registrado y no volveré a contactar. Gracias.",
+      "say": {
+        "es": "Entendido. Lo dejo registrado y no volveré a contactar. Gracias.",
+        "ca": "Entesos. Ho deixo registrat i no tornaré a contactar. Gràcies."
+      },
       "responses": [
-        { "id": "finish", "label": "Finalizar llamada", "next": "@end:do_not_contact", "tone": "close" }
+        { "id": "finish", "label": { "es": "Finalizar llamada", "ca": "Finalitzar la trucada" }, "next": "@end:do_not_contact", "tone": "close" }
       ]
     }
   ]

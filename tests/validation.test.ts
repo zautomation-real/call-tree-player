@@ -4,6 +4,7 @@ import minimal from '../fixtures/valid/minimal.call.json'
 import repeated from '../fixtures/valid/repeated-provider.call.json'
 import evidence from '../fixtures/valid/evidence.call.json'
 import unexpectedOverride from '../fixtures/valid/unexpected-override.call.json'
+import bilingual from '../fixtures/valid/bilingual.call.json'
 import duplicateNode from '../fixtures/invalid/duplicate-node-id.call.json'
 import duplicateLabel from '../fixtures/invalid/duplicate-response-label.call.json'
 import missingTarget from '../fixtures/invalid/missing-target.call.json'
@@ -15,6 +16,7 @@ describe('validación de guiones', () => {
     ['repeated-provider', repeated],
     ['evidence', evidence],
     ['unexpected-override', unexpectedOverride],
+    ['bilingual', bilingual],
   ])('acepta el fixture válido %s', (_name, fixture) => {
     expect(validateCallScript(fixture).errors).toEqual([])
     expect(validateCallScript(fixture).valid).toBe(true)
@@ -33,5 +35,13 @@ describe('validación de guiones', () => {
 
   it('acepta etiquetas repetidas entre nodos distintos', () => {
     expect(validateCallScript(repeated).valid).toBe(true)
+  })
+
+  it('rechaza una traducción bilingüe incompleta', () => {
+    const incomplete = structuredClone(bilingual) as unknown as { nodes: Array<{ say: { es: string; ca?: string } }> }
+    delete incomplete.nodes[0].say.ca
+    const result = validateCallScript(incomplete)
+    expect(result.valid).toBe(false)
+    expect(result.errors.join(' ')).toContain('campo obligatorio')
   })
 })

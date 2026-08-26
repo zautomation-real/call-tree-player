@@ -1,4 +1,6 @@
 export type Tone = 'neutral' | 'advance' | 'clarify' | 'objection' | 'handoff' | 'close'
+export type Language = 'es' | 'ca'
+export type LocalizedText = string | Record<Language, string>
 
 export interface Company {
   name: string
@@ -7,12 +9,12 @@ export interface Company {
   phone?: string
 }
 
-export interface Outcome { id: string; label: string }
-export interface Evidence { title: string; text?: string; url?: string; image_url?: string }
-export interface Response { id: string; label: string; next: string; tone?: Tone }
+export interface Outcome { id: string; label: LocalizedText }
+export interface Evidence { title: LocalizedText; text?: LocalizedText; url?: string; image_url?: string }
+export interface Response { id: string; label: LocalizedText; next: string; tone?: Tone }
 export interface CallNode {
   id: string
-  say: string
+  say: LocalizedText
   evidence?: Evidence[]
   responses?: Response[]
   terminal?: { outcome: string }
@@ -20,6 +22,7 @@ export interface CallNode {
 
 export interface CallScript {
   schema_version: '1.0.0'
+  default_language?: Language
   script_id: string
   title: string
   company: Company
@@ -31,16 +34,16 @@ export interface CallScript {
 
 export interface UnexpectedEntry {
   id: string
-  label: string
-  category: string
+  label: LocalizedText
+  category: LocalizedText
   keywords: string[]
   behavior: 'return' | 'branch' | 'end'
   tone?: Tone
-  say: string
+  say: LocalizedText
   responses: Response[]
 }
 
-export interface UnexpectedRegistry { schema_version: '1.0.0'; entries: UnexpectedEntry[] }
+export interface UnexpectedRegistry { schema_version: '1.0.0'; default_language: Language; entries: UnexpectedEntry[] }
 export interface HistoryEntry { context: 'call' | 'unexpected'; id: string }
 export interface SessionEvent { type: string; at: string; [key: string]: unknown }
 export interface SessionState {
@@ -55,6 +58,7 @@ export interface SessionState {
   history: HistoryEntry[]
   events: SessionEvent[]
   outcomeId?: string
+  language?: Language
 }
 
 export interface ValidationResult {

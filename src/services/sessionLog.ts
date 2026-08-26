@@ -9,6 +9,7 @@ export function createSessionLog(script: CallScript, session: SessionState) {
     started_at: session.startedAt,
     ended_at: session.updatedAt,
     outcome: session.outcomeId,
+    language: session.language ?? script.default_language ?? 'es',
     selection_count: session.events.filter((event) => event.type === 'response' || event.type === 'unexpected_response').length,
     events: session.events,
   }

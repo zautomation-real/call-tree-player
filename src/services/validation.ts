@@ -4,6 +4,7 @@ import callScriptSchema from '../schemas/call-script.schema.json'
 import registrySchema from '../schemas/unexpected-registry.schema.json'
 import registryData from '../data/unexpected.registry.json'
 import type { CallScript, UnexpectedRegistry, ValidationResult } from '../app/types'
+import { resolveText } from './localization'
 
 const ajv = new Ajv2020({ allErrors: true, strict: true })
 addFormats(ajv)
@@ -52,13 +53,14 @@ function semanticValidation(script: CallScript): Pick<ValidationResult, 'errors'
   script.nodes.forEach((node, nodeIndex) => {
     if (node.responses) {
       const responseIds = node.responses.map((response) => response.id)
-      const labels = node.responses.map((response) => response.label)
+      const labels = node.responses.map((response) => [resolveText(response.label, 'es'), resolveText(response.label, 'ca')])
       node.responses.forEach((response, responseIndex) => {
         if (responseIds.indexOf(response.id) !== responseIndex) {
           errors.push(`nodes[${nodeIndex}].responses[${responseIndex}].id: el identificador "${response.id}" está duplicado en este nodo`)
         }
-        if (labels.indexOf(response.label) !== responseIndex) {
-          errors.push(`nodes[${nodeIndex}].responses[${responseIndex}].label: la respuesta "${response.label}" está duplicada en este nodo`)
+        const duplicateLabel = labels.some((other, otherIndex) => otherIndex < responseIndex && other.some((label, languageIndex) => label === labels[responseIndex][languageIndex]))
+        if (duplicateLabel) {
+          errors.push(`nodes[${nodeIndex}].responses[${responseIndex}].label: la respuesta está duplicada en este nodo`)
         }
         if (!nodeSet.has(response.next)) {
           errors.push(`nodes[${nodeIndex}].responses[${responseIndex}].next: el nodo destino "${response.next}" no existe`)
@@ -81,7 +83,7 @@ function semanticValidation(script: CallScript): Pick<ValidationResult, 'errors'
 
   if (nodeSet.has(script.start_node)) {
     const reachable = new Set<string>()
-    const queue = [script.start_node]
+    const queue = [script.start_node, ...Object.values(script.unexpected_routes ?? {})]
     while (queue.length) {
       const id = queue.shift()!
       if (reachable.has(id)) continue
