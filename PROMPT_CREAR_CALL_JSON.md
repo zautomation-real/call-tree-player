@@ -30,7 +30,7 @@ DATOS DE LA LLAMADA
 REGLAS CONVERSACIONALES
 1. No inventes nombres, cargos, clientes, resultados, precios, urgencia, disponibilidad, causas técnicas ni pérdidas económicas.
 2. Si falta un dato necesario, formula una pregunta para confirmarlo durante la llamada; no lo completes por intuición.
-3. La apertura contiene identidad breve, una sola razón concreta y una petición corta de permiso.
+3. La apertura con el interlocutor contiene identidad breve, una sola razón concreta y una petición corta de permiso. Si responde recepción, la primera intervención ya incluye identidad, el hecho concreto que justifica la llamada y la función capaz de gestionarlo: no abras únicamente con «soy [nombre] de [empresa] y quería hablar con el responsable» ni reserves el motivo para una rama «¿por qué llamas?».
 4. Usa un único hallazgo principal y una sola pregunta por nodo.
 5. Muestra entre 2 y 4 respuestas visibles y conserva solo las reacciones que cambian la intervención siguiente.
 6. Una intervención ordinaria no supera 260 caracteres; una explicación técnica puede llegar a 320 si contiene una sola idea.
@@ -40,6 +40,8 @@ REGLAS CONVERSACIONALES
 10. No interpretes silencio, corte o falta de respuesta como rechazo.
 11. Termina cada ruta con un resultado claro y un único siguiente paso.
 12. Los textos terminales deben ser frases naturales que puedan pronunciarse; no incluyas instrucciones internas en `say`.
+13. Incluye normalmente una ruta inesperada `what_do_you_want` para «¿dónde quieres llegar?» o «¿qué quieres exactamente?». Debe responder primero con el objetivo concreto de esa llamada en una frase, sin defender al vendedor, repetir toda la auditoría ni introducir portfolio, precio o reunión. Sobrescribe la respuesta genérica cuando el objetivo de la cuenta requiera más precisión.
+14. Aplica una prueba de sustitución a la apertura de recepción: si podría utilizarse para otra empresa cambiando solo el nombre, recházala y añade el hecho verificable que permita enrutar la llamada. Una rama posterior no corrige una apertura genérica.
 
 CONTRATO DE IDIOMA
 - Usa exactamente `"default_language": "es"` o `"default_language": "ca"`, según los datos.

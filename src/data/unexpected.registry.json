@@ -34,6 +34,21 @@
       ]
     },
     {
+      "id": "what_do_you_want",
+      "label": { "es": "¿Dónde quieres llegar?", "ca": "On vols arribar?" },
+      "category": { "es": "Intención", "ca": "Intenció" },
+      "keywords": ["qué quieres", "dónde quieres llegar", "objetivo", "què vols", "on vols arribar", "objectiu"],
+      "behavior": "return",
+      "tone": "clarify",
+      "say": {
+        "es": "Quiero confirmar si lo que he encontrado ya está localizado y quién puede gestionarlo. Si no os aporta nada, lo dejamos aquí.",
+        "ca": "Vull confirmar si el que he trobat ja està localitzat i qui ho pot gestionar. Si no us aporta res, ho deixem aquí."
+      },
+      "responses": [
+        { "id": "continue", "label": { "es": "Continuar conversación", "ca": "Continuar la conversa" }, "next": "@return", "tone": "neutral" }
+      ]
+    },
+    {
       "id": "do_not_contact",
       "label": { "es": "No vuelvas a contactar", "ca": "No tornis a contactar" },
       "category": { "es": "Cierre", "ca": "Tancament" },
