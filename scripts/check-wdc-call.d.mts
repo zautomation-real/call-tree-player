@@ -1,5 +1,10 @@
 export interface WdcCallQualityOptions {
   decisionEntry: string
+  identityEntry?: string
+  openingEntry?: string
+  receptionEntry?: string
+  openingMode?: 'known-person' | 'reception'
+  contactName?: string
   openingAnchors: { es: string[]; ca: string[] }
 }
 

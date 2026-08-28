@@ -30,11 +30,11 @@ DATOS DE LA LLAMADA
 REGLAS CONVERSACIONALES
 1. No inventes nombres, cargos, clientes, resultados, precios, urgencia, disponibilidad, causas técnicas ni pérdidas económicas.
 2. Si falta un dato necesario, formula una pregunta para confirmarlo durante la llamada; no lo completes por intuición.
-3. La apertura con el interlocutor contiene identidad breve, una sola razón concreta y una petición corta de permiso. Si responde recepción, la primera intervención ya incluye identidad, el hecho concreto que justifica la llamada y la función capaz de gestionarlo: no abras únicamente con «soy [nombre] de [empresa] y quería hablar con el responsable» ni reserves el motivo para una rama «¿por qué llamas?».
+3. Elige el modo de entrada antes de escribir. Si existe una persona concreta, el primer nodo solo confirma su identidad («Hola, ¿hablo con [nombre]?»); después del «sí», usa nombre confirmado, identidad breve, una sola razón concreta y permiso. Si no es esa persona, la rama de recepción incluye identidad, hecho y función buscada. Si el responsable es desconocido, la primera intervención ya incluye esos tres elementos. No fusiones confirmación de identidad, presentación, hallazgo, defensa y ownership para ahorrar nodos.
 4. Usa un único hallazgo principal y una sola pregunta por nodo.
 5. Muestra entre 2 y 4 respuestas visibles y conserva solo las reacciones que cambian la intervención siguiente.
-6. Una intervención ordinaria no supera 260 caracteres; una explicación técnica puede llegar a 320 si contiene una sola idea.
-7. La ruta principal no supera 8 elecciones.
+6. Revisa oralmente cualquier intervención larga. No comprimas etapas humanas distintas solo para satisfacer una métrica de caracteres.
+7. La profundidad no es por sí sola carga cognitiva: controla las opciones visibles de cada pantalla y permite que un discovery aceptado continúe. No alargues una ruta ya resuelta.
 8. No crees ciclos ni reabras la venta después de un rechazo cerrado o una petición de no contacto.
 9. Separa los permisos para enviar evidencia, información comercial, presupuesto o concertar una reunión.
 10. No interpretes silencio, corte o falta de respuesta como rechazo.
@@ -79,6 +79,7 @@ Comprueba antes de responder:
 6. ruta principal de 8 elecciones como máximo;
 7. ningún hecho inventado;
 8. en modo bilingüe, cada texto localizable contiene `es` y `ca` y ambos recorren exactamente el mismo grafo.
+9. si hay persona conocida, la confirmación de identidad está separada del Connect; si hay recepción, el motivo concreto aparece en su primera intervención sustantiva.
 
 Si los datos bastan, devuelve directamente JSON puro. Si falta información imprescindible, formula primero un máximo de 5 preguntas concretas y espera las respuestas.
 ```
