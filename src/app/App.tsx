@@ -97,7 +97,7 @@ function ResponseButton({ response, index, language, onClick }: { response: Resp
 function BrandCredit({ utility = false }: { utility?: boolean }) {
   const credit = (
     <a className="brand-credit__link" href="https://websdelcamp.cat/ca?utm_source=guionizador&utm_medium=app&utm_campaign=enlace_marca" target="_blank" rel="noopener noreferrer" aria-label="Visitar Webs del Camp">
-      <img src="./favicon.svg" alt="" aria-hidden="true" />
+      <img src="./wdc-footer-icon.png" alt="" aria-hidden="true" />
       <span className="brand-credit__copy"><small>Ofrecido por</small><strong>Webs del Camp</strong></span>
       <span className="brand-credit__arrow" aria-hidden="true">↗</span>
     </a>
